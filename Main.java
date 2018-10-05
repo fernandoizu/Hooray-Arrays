@@ -1,30 +1,46 @@
-//intento de array dinamico
-
 import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
-        
-        int[] history = {0,0,0,0,0,0};
-        int total = 0;
-        int counter = 0;
-        int start = 1;
-        
-        while (start > 0) {            
-            
-        System.out.println("[TOTAL = " + total + "]");
-        System.out.print("HISTORY = {");
-        for (int i = 0; i < history.length; i++){
-            System.out.print(history[i]+ ",");
-        }
-            System.out.println("...0}");
-        System.out.println("Ingrese un numero...");
-        Scanner scanner = new Scanner(System.in);
-        int input = scanner.nextInt();
-        history[counter] = input;
-        total = total + input;
-        counter++;
-        }
-        
-       
+  private static final int DEFAULT_INITIAL_CAPACITY = 5;
+  private static final int CAPACITY_INCREMENT = 5;
+
+  public static void main(String[] args) {
+    int capacity = DEFAULT_INITIAL_CAPACITY;
+    int[] history = new int[capacity];
+    int total = 0;
+
+    Scanner scanner = new Scanner(System.in);
+
+    while (true) {
+      System.out.print("Please enter a number: ");
+      int input = scanner.nextInt();
+      history[total++] = input;
+
+      StringBuilder sb = new StringBuilder("History = {");
+      for (int historyElement : history) {
+        sb.append(historyElement);
+        sb.append(",");
+      }
+      sb.deleteCharAt(sb.length() - 1);
+      sb.append("}");
+      System.out.println(sb.toString());
+
+      if (total == capacity) {
+        int newCapacity = capacity + CAPACITY_INCREMENT;
+        System.out.println("Increasing capacity from " + capacity + " -> " + newCapacity);
+        history = increaseCapacity(history, newCapacity);
+        capacity = newCapacity;
+      }
+      System.out.println("Capacity: [" + total + "/" + capacity + "]");
+    }
+  }
+
+  private static int[] increaseCapacity(int[] source, int newCapacity) {
+    int[] target = new int[newCapacity];
+    System.arraycopy(source, 0, target, 0, source.length);
+    return target;
+  }
+
+}
+
